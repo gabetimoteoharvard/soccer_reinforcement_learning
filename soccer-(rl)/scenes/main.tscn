@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://dm0nhwmpmuu6n"]
+
+[ext_resource type="Script" uid="uid://c1a4bkmajkn8c" path="res://scripts/game_configs/CameraRig.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://crtmdh1yr6guv" path="res://scenes/player_ai.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://ctrphthyyvn8" path="res://scenes/ball.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://yq2up7qb7uhk" path="res://scenes/goalpost.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://daw3xncdh7d2n" path="res://scenes/wall.tscn" id="5_o6xl0"]
+[ext_resource type="Script" uid="uid://r4p1i8ovl5pf" path="res://scenes/out_of_bounds.gd" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://cjer64smyheq5" path="res://addons/godot_rl_agents/sync.gd" id="6_tefeu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyxwi"]
+albedo_color = Color(0.30822194, 0.3483186, 0.22722629, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gcb4b"]
+material = SubResource("StandardMaterial3D_yyxwi")
+size = Vector2(50, 50)
+center_offset = Vector3(0, -0.01, 0)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nk661"]
+sky_top_color = Color(0.713726, 0.698039, 0.729412, 1)
+sky_horizon_color = Color(0.713726, 0.698039, 0.729412, 1)
+ground_bottom_color = Color(0.803922, 0.698039, 0.729412, 1)
+ground_horizon_color = Color(0.713726, 0.698039, 0.729412, 1)
+
+[sub_resource type="Sky" id="Sky_teft3"]
+sky_material = SubResource("ProceduralSkyMaterial_nk661")
+
+[sub_resource type="Environment" id="Environment_iapbc"]
+background_mode = 2
+sky = SubResource("Sky_teft3")
+ambient_light_source = 3
+ambient_light_color = Color(0.882353, 0.74902, 0, 1)
+ambient_light_energy = 1.71
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_puy4h"]
+albedo_color = Color(0.66021013, 0.7185674, 0.25184932, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lp0ne"]
+material = SubResource("StandardMaterial3D_puy4h")
+size = Vector2(10, 6)
+
+[sub_resource type="Environment" id="Environment_sugp2"]
+tonemap_exposure = 2.0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_paxec"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mtjwb"]
+size = Vector3(10, 1, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwy8o"]
+size = Vector3(11.290527, 1, 2.668457)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o2cxk"]
+size = Vector3(1, 1, 10.565796)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1boud"]
+size = Vector3(12.778198, 0.12855175, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pd203"]
+size = Vector3(1.7416992, 1, 11.991272)
+
+[node name="Main" type="Node3D" unique_id=912178496]
+transform = Transform3D(1, 0, 0.00029704, 0, 1, 0, -0.00029704, 0, 1, 0, 0, 0)
+
+[node name="Scenery" type="Node3D" parent="." unique_id=2141442648]
+
+[node name="ArenaGround" type="MeshInstance3D" parent="Scenery" unique_id=2141458957]
+transform = Transform3D(0.99999917, 0, 0, 0, 1, 0, 0, 0, 0.99999917, 0.0050618793, -0.020960331, 0.02242238)
+mesh = SubResource("PlaneMesh_gcb4b")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Scenery" unique_id=1397156264]
+environment = SubResource("Environment_iapbc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scenery" unique_id=2034773031]
+transform = Transform3D(-0.139925, 0.337104, -0.931011, -0.355284, 0.860555, 0.36499, 0.924226, 0.381845, -0.00064528, -4.98983, 2.24855, -0.336832)
+light_color = Color(1, 1, 0.788235, 1)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="FieldMesh" type="MeshInstance3D" parent="Scenery" unique_id=1154378956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0099287, 0)
+mesh = SubResource("PlaneMesh_lp0ne")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=416330221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.03383e-08, 2.19674, 4)
+script = ExtResource("1_0wfyh")
+mouse_sensitivity = 0.001
+
+[node name="PitchPivot" type="Node3D" parent="CameraRig" unique_id=1558431256]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/PitchPivot" unique_id=982960979]
+environment = SubResource("Environment_sugp2")
+fov = 70.8895
+
+[node name="Player" parent="." unique_id=867075436 node_paths=PackedStringArray("ball", "goalpost", "field") instance=ExtResource("2_sugp2")]
+transform = Transform3D(0.9999989, 0, 0, 0, 1, 0, 0, 0, 0.9999989, -0.80780596, 1.2850494, 0.011894199)
+collision_layer = 2
+collision_mask = 5
+ball = NodePath("../Ball")
+goalpost = NodePath("../Goalpost")
+field = NodePath("../Scenery/FieldMesh")
+
+[node name="GrassBody" type="StaticBody3D" parent="." unique_id=1137269976]
+collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_paxec")
+
+[node name="CollisionBody3d" type="CollisionShape3D" parent="GrassBody" unique_id=266282278]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0, -0.49248886, 0)
+shape = SubResource("BoxShape3D_mtjwb")
+
+[node name="Ball" parent="." unique_id=750434368 node_paths=PackedStringArray("field") instance=ExtResource("3_sugp2")]
+transform = Transform3D(0.9999997, 0, 0, 0, 1, 0, 0, 0, 0.9999997, -0.88838035, 2.595197, 0.36260659)
+collision_layer = 4
+collision_mask = 3
+field = NodePath("../Scenery/FieldMesh")
+
+[node name="Goalpost" parent="." unique_id=1556288369 node_paths=PackedStringArray("player") instance=ExtResource("4_jyhfs")]
+transform = Transform3D(-0.0061085117, 0, -0.4999627, 0, 0.5, 0, 0.4999627, 0, -0.0061085117, 3.9936235, 0, 0.0666529)
+player = NodePath("../Player")
+
+[node name="Walls" type="Node3D" parent="." unique_id=827250810]
+
+[node name="Wall" parent="Walls" unique_id=1803964753 instance=ExtResource("5_o6xl0")]
+transform = Transform3D(1.34, 0, -1.1641532e-10, 0, 1.34, 0, 1.1641532e-10, 0, 1.34, 0.039194103, 11.070378, -3.0291312)
+collision_mask = 7
+
+[node name="Wall2" parent="Walls" unique_id=689163247 instance=ExtResource("5_o6xl0")]
+transform = Transform3D(1.34, 0, -2.0372681e-10, 0, 1.34, 0, 2.0372681e-10, 0, 1.34, -0.0126268165, 10.884105, 2.9527154)
+collision_mask = 7
+
+[node name="Wall3" parent="Walls" unique_id=1212552410 instance=ExtResource("5_o6xl0")]
+transform = Transform3D(-3.5885023e-08, 0, -0.8199994, 0, 0.82, 0, 0.8199994, 0, -3.5885023e-08, 4.971911, 11.250641, -0.0057821544)
+collision_mask = 7
+
+[node name="Wall4" parent="Walls" unique_id=1960855109 instance=ExtResource("5_o6xl0")]
+transform = Transform3D(-3.579771e-08, 0, 0.8199995, 0, 0.82, 0, -0.8199995, 0, -3.579771e-08, -4.9421215, 11.207966, -0.061905436)
+collision_mask = 7
+
+[node name="OutOfBounds" type="Area3D" parent="." unique_id=177744057 node_paths=PackedStringArray("player")]
+collision_mask = 6
+script = ExtResource("5_tbgi4")
+player = NodePath("../Player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="OutOfBounds" unique_id=1295984576]
+transform = Transform3D(0.9999834, 0, 0, 0, 1, 0, 0, 0, 0.9999834, -0.00097581197, -0.5275458, -4.181112)
+shape = SubResource("BoxShape3D_lwy8o")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="OutOfBounds" unique_id=142905616]
+transform = Transform3D(0.99998647, 0, 0, 0, 1, 0, 0, 0, 0.99998647, -5.539587, -0.5279889, 0.017606463)
+shape = SubResource("BoxShape3D_o2cxk")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="OutOfBounds" unique_id=557340446]
+transform = Transform3D(0.9999798, 0, 0, 0, 1, 0, 0, 0, 0.9999798, -0.19986083, -0.09024042, 3.5165784)
+shape = SubResource("BoxShape3D_1boud")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="OutOfBounds" unique_id=2044504420]
+transform = Transform3D(0.9999917, 0, 0, 0, 1, 0, 0, 0, 0.9999917, 5.7970924, -0.49969482, -0.46144846)
+shape = SubResource("BoxShape3D_pd203")
+
+[node name="Sync" type="Node" parent="." unique_id=299957427]
+script = ExtResource("6_tefeu")
+metadata/_custom_type_script = "uid://cjer64smyheq5"
+
+[connection signal="body_entered" from="OutOfBounds" to="OutOfBounds" method="_on_body_entered"]

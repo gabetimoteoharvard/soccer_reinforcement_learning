@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://ctrphthyyvn8"]
+
+[ext_resource type="Script" uid="uid://b72o2s5nf6alx" path="res://scenes/ball.gd" id="1_7s4qf"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_d4xtr"]
+friction = 0.8
+bounce = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_paxec"]
+radius = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7a20g"]
+albedo_color = Color(0.9198094, 0.5949391, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_paxec"]
+material = SubResource("StandardMaterial3D_7a20g")
+radius = 0.1
+height = 0.2
+
+[node name="Ball" type="RigidBody3D" unique_id=750434368]
+physics_material_override = SubResource("PhysicsMaterial_d4xtr")
+script = ExtResource("1_7s4qf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2145890912]
+shape = SubResource("SphereShape3D_paxec")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1050913132]
+mesh = SubResource("SphereMesh_paxec")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=859850459]
+target_position = Vector3(0, 0, -1)

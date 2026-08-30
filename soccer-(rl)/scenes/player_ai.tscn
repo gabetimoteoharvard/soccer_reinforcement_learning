@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://crtmdh1yr6guv"]
+
+[ext_resource type="Script" uid="uid://bokoknkt554rx" path="res://scenes/player.gd" id="1_dorh7"]
+[ext_resource type="Script" uid="uid://dko0ntnrntojb" path="res://scenes/ai_controller_3d.gd" id="2_tg5g5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v005w"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hkf1j"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hkf1j"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rpdgl"]
+material = SubResource("StandardMaterial3D_hkf1j")
+radius = 0.01
+height = 0.02
+
+[node name="PlayerAI" type="CharacterBody3D" unique_id=1484186540]
+script = ExtResource("1_dorh7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2108077649]
+shape = SubResource("BoxShape3D_v005w")
+
+[node name="Body" type="MeshInstance3D" parent="CollisionShape3D" unique_id=1758061110]
+mesh = SubResource("BoxMesh_hkf1j")
+
+[node name="Eye_1" type="MeshInstance3D" parent="CollisionShape3D" unique_id=358652447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0481752, 0.0421431, 0.107399)
+mesh = SubResource("CapsuleMesh_rpdgl")
+
+[node name="Eye_2" type="MeshInstance3D" parent="CollisionShape3D" unique_id=12379709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0443694, 0.0421431, 0.107399)
+mesh = SubResource("CapsuleMesh_rpdgl")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=177040343]
+target_position = Vector3(0, 0, 1)
+
+[node name="AIController3D" type="Node3D" parent="." unique_id=1451553082]
+script = ExtResource("2_tg5g5")
+metadata/_custom_type_script = "uid://mkvsjyx62n0c"
